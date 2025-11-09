@@ -6,13 +6,13 @@ const WorkflowDiagram = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedServers, setSelectedServers] = useState<number[]>([]);
 
-  // MCP Servers configuration
+  // MCP Servers configuration with better dark theme colors
   const mcpServers = [
-    { name: 'Slack', color: 'from-purple-500 to-pink-500', icon: '💬', bgColor: 'bg-purple-500' },
-    { name: 'HubSpot', color: 'from-orange-500 to-red-500', icon: '🎯', bgColor: 'bg-orange-500' },
-    { name: 'Microsoft', color: 'from-blue-500 to-cyan-500', icon: '📘', bgColor: 'bg-blue-500' },
-    { name: 'Zomato', color: 'from-red-500 to-pink-500', icon: '🍽️', bgColor: 'bg-red-500' },
-    { name: 'Neon', color: 'from-green-500 to-emerald-500', icon: '⚡', bgColor: 'bg-green-500' }
+    { name: 'Slack', color: 'from-purple-500 to-pink-500', icon: '💬', bgColor: 'bg-purple-600' },
+    { name: 'HubSpot', color: 'from-orange-500 to-red-500', icon: '🎯', bgColor: 'bg-orange-600' },
+    { name: 'Microsoft', color: 'from-blue-500 to-cyan-500', icon: '📘', bgColor: 'bg-blue-600' },
+    { name: 'Zomato', color: 'from-red-500 to-pink-500', icon: '🍽️', bgColor: 'bg-red-600' },
+    { name: 'Neon', color: 'from-green-500 to-emerald-500', icon: '⚡', bgColor: 'bg-green-600' }
   ];
 
   const steps = [
@@ -84,14 +84,14 @@ const WorkflowDiagram = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 via-purple-50 to-blue-50 dark:from-slate-900 dark:via-purple-900 dark:to-slate-900 p-8">
+    <div className="bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 rounded-2xl p-8 border border-border">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-2 animate-fade-in">
-          <h2 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold text-white">
             Agent Workflow Process
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-slate-400">
             How Multi-MCP Agent intelligently orchestrates your requests
           </p>
         </div>
@@ -99,9 +99,9 @@ const WorkflowDiagram = () => {
         {/* Main Workflow Steps */}
         <div className="relative">
           {/* Progress Line */}
-          <div className="absolute top-16 left-0 right-0 h-1 bg-border rounded-full overflow-hidden">
+          <div className="absolute top-16 left-0 right-0 h-1 bg-slate-800 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-primary transition-all duration-1000 ease-out"
+              className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-1000 ease-out"
               style={{ width: `${((activeStep + 1) / steps.length) * 100}%` }}
             />
           </div>
@@ -118,12 +118,12 @@ const WorkflowDiagram = () => {
               >
                 {/* Step Card */}
                 <div className={cn(
-                  "bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-lg border-2 transition-all duration-500",
+                  "bg-slate-900 p-5 rounded-2xl shadow-lg border-2 transition-all duration-500",
                   activeStep === index 
-                    ? 'border-primary shadow-glow' 
+                    ? 'border-primary shadow-glow shadow-purple-500/50' 
                     : activeStep > index 
-                      ? 'border-success/50' 
-                      : 'border-border'
+                      ? 'border-green-500/50' 
+                      : 'border-slate-800'
                 )}>
                   {/* Icon Circle */}
                   <div className={cn(
@@ -131,12 +131,12 @@ const WorkflowDiagram = () => {
                     activeStep === index 
                       ? `bg-gradient-to-br ${step.color} animate-pulse shadow-lg` 
                       : activeStep > index
-                        ? 'bg-success/20'
-                        : 'bg-muted'
+                        ? 'bg-green-500/20'
+                        : 'bg-slate-800'
                   )}>
                     <div className={cn(
                       "transition-colors",
-                      activeStep >= index ? 'text-white' : 'text-muted-foreground'
+                      activeStep >= index ? 'text-white' : 'text-slate-500'
                     )}>
                       {step.icon}
                     </div>
@@ -144,20 +144,20 @@ const WorkflowDiagram = () => {
 
                   {/* Content */}
                   <div className="text-center space-y-1">
-                    <div className="text-xs font-semibold text-muted-foreground">
+                    <div className="text-xs font-semibold text-slate-500">
                       Step {step.id}
                     </div>
-                    <h3 className="text-sm font-bold text-foreground">
+                    <h3 className="text-sm font-bold text-white">
                       {step.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-slate-400">
                       {step.desc}
                     </p>
                   </div>
 
                   {/* Checkmark for completed steps */}
                   {activeStep > index && (
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-success rounded-full flex items-center justify-center shadow-lg animate-scale-in">
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-scale-in">
                       <CheckCircle className="w-4 h-4 text-white" />
                     </div>
                   )}
@@ -165,7 +165,7 @@ const WorkflowDiagram = () => {
                   {/* Active indicator */}
                   {activeStep === index && (
                     <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
+                      <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" />
                     </div>
                   )}
                 </div>
@@ -175,33 +175,33 @@ const WorkflowDiagram = () => {
         </div>
 
         {/* Current Step Detail */}
-        <div className="bg-gradient-primary/10 backdrop-blur-sm rounded-2xl p-6 border border-primary/20 animate-fade-in">
+        <div className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 animate-fade-in">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
               {steps[activeStep].icon}
             </div>
             <div>
-              <h3 className="font-bold text-foreground">{steps[activeStep].title}</h3>
-              <p className="text-sm text-muted-foreground">{steps[activeStep].detail}</p>
+              <h3 className="font-bold text-white">{steps[activeStep].title}</h3>
+              <p className="text-sm text-slate-400">{steps[activeStep].detail}</p>
             </div>
           </div>
         </div>
 
         {/* MCP Servers Display */}
-        <div className="bg-card rounded-2xl p-6 border shadow-elegant">
+        <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <Server className="w-6 h-6 text-primary" />
-              <h3 className="text-xl font-bold text-foreground">
+              <Server className="w-6 h-6 text-purple-400" />
+              <h3 className="text-xl font-bold text-white">
                 Connected MCP Servers
               </h3>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <div className={cn(
                 "w-2 h-2 rounded-full",
-                activeStep === 2 || activeStep === 3 ? 'bg-success animate-pulse' : 'bg-muted-foreground'
+                activeStep === 2 || activeStep === 3 ? 'bg-green-500 animate-pulse' : 'bg-slate-600'
               )} />
-              <span className="text-muted-foreground">
+              <span className="text-slate-400">
                 {activeStep === 2 || activeStep === 3 ? 'Searching...' : 'Ready'}
               </span>
             </div>
@@ -220,10 +220,10 @@ const WorkflowDiagram = () => {
                   )}
                 >
                   <div className={cn(
-                    "p-4 rounded-xl border-2 transition-all duration-500",
+                    "p-4 rounded-xl border-2 transition-all duration-500 bg-slate-950",
                     isSelected 
-                      ? 'border-primary shadow-glow bg-gradient-to-br from-primary/5 to-primary/10' 
-                      : 'border-border bg-card hover:border-primary/30'
+                      ? 'border-purple-500 shadow-glow shadow-purple-500/50 bg-gradient-to-br from-purple-900/20 to-pink-900/20' 
+                      : 'border-slate-800 hover:border-purple-500/30'
                   )}>
                     {/* Server Icon */}
                     <div className="text-4xl mb-2 text-center">
@@ -231,7 +231,7 @@ const WorkflowDiagram = () => {
                     </div>
                     
                     {/* Server Name */}
-                    <h4 className="text-sm font-bold text-foreground text-center mb-2">
+                    <h4 className="text-sm font-bold text-white text-center mb-2">
                       {server.name}
                     </h4>
                     
@@ -239,9 +239,9 @@ const WorkflowDiagram = () => {
                     <div className="flex items-center justify-center gap-2">
                       <div className={cn(
                         "w-1.5 h-1.5 rounded-full",
-                        isSelected ? 'bg-success animate-pulse' : 'bg-muted-foreground'
+                        isSelected ? 'bg-green-500 animate-pulse' : 'bg-slate-600'
                       )} />
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-slate-400">
                         {isSelected ? 'Active' : 'Ready'}
                       </span>
                     </div>
@@ -249,7 +249,7 @@ const WorkflowDiagram = () => {
                     {/* Selection Indicator */}
                     {isSelected && (
                       <div className="absolute -top-2 -right-2">
-                        <div className="w-6 h-6 bg-success rounded-full flex items-center justify-center shadow-lg animate-scale-in">
+                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-scale-in">
                           <CheckCircle className="w-4 h-4 text-white" />
                         </div>
                       </div>
@@ -265,28 +265,28 @@ const WorkflowDiagram = () => {
         <div className="grid grid-cols-2 gap-6">
           {/* FAISS Server Indexes */}
           <div className={cn(
-            "bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 rounded-2xl p-6 border-2 transition-all duration-500",
-            activeStep === 2 ? 'border-primary shadow-glow scale-105' : 'border-border'
+            "bg-gradient-to-br from-indigo-950 to-purple-950 rounded-2xl p-6 border-2 transition-all duration-500",
+            activeStep === 2 ? 'border-purple-500 shadow-glow shadow-purple-500/50 scale-105' : 'border-slate-800'
           )}>
             <div className="flex items-center gap-3 mb-4">
               <div className={cn(
                 "w-10 h-10 rounded-xl flex items-center justify-center",
-                activeStep === 2 ? 'bg-gradient-primary animate-pulse' : 'bg-primary/20'
+                activeStep === 2 ? 'bg-gradient-to-br from-purple-500 to-pink-500 animate-pulse' : 'bg-purple-900/20'
               )}>
                 <Database className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h4 className="text-lg font-bold text-foreground">FAISS DB</h4>
-                <p className="text-sm text-muted-foreground">Server Indexes</p>
+                <h4 className="text-lg font-bold text-white">FAISS DB</h4>
+                <p className="text-sm text-slate-400">Server Indexes</p>
               </div>
             </div>
             <div className="space-y-2">
               {mcpServers.map((server, idx) => (
-                <div key={idx} className="flex items-center justify-between bg-white/50 dark:bg-slate-800/50 p-2 rounded-lg">
-                  <span className="text-sm text-foreground">{server.name} Index</span>
+                <div key={idx} className="flex items-center justify-between bg-slate-900/50 p-2 rounded-lg">
+                  <span className="text-sm text-slate-300">{server.name} Index</span>
                   <div className={cn(
                     "w-2 h-2 rounded-full",
-                    activeStep === 2 && selectedServers.includes(idx) ? 'bg-success animate-pulse' : 'bg-muted-foreground/30'
+                    activeStep === 2 && selectedServers.includes(idx) ? 'bg-green-500 animate-pulse' : 'bg-slate-700'
                   )} />
                 </div>
               ))}
@@ -295,28 +295,28 @@ const WorkflowDiagram = () => {
 
           {/* FAISS Tool Indexes */}
           <div className={cn(
-            "bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 rounded-2xl p-6 border-2 transition-all duration-500",
-            activeStep === 3 ? 'border-primary shadow-glow scale-105' : 'border-border'
+            "bg-gradient-to-br from-emerald-950 to-teal-950 rounded-2xl p-6 border-2 transition-all duration-500",
+            activeStep === 3 ? 'border-emerald-500 shadow-glow shadow-emerald-500/50 scale-105' : 'border-slate-800'
           )}>
             <div className="flex items-center gap-3 mb-4">
               <div className={cn(
                 "w-10 h-10 rounded-xl flex items-center justify-center",
-                activeStep === 3 ? 'bg-gradient-primary animate-pulse' : 'bg-primary/20'
+                activeStep === 3 ? 'bg-gradient-to-br from-emerald-500 to-teal-500 animate-pulse' : 'bg-emerald-900/20'
               )}>
                 <Search className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h4 className="text-lg font-bold text-foreground">Tool Indexes</h4>
-                <p className="text-sm text-muted-foreground">FAISS Search</p>
+                <h4 className="text-lg font-bold text-white">Tool Indexes</h4>
+                <p className="text-sm text-slate-400">FAISS Search</p>
               </div>
             </div>
             <div className="space-y-2">
               {mcpServers.map((server, idx) => (
-                <div key={idx} className="flex items-center justify-between bg-white/50 dark:bg-slate-800/50 p-2 rounded-lg">
-                  <span className="text-sm text-foreground">{server.name} Tools</span>
+                <div key={idx} className="flex items-center justify-between bg-slate-900/50 p-2 rounded-lg">
+                  <span className="text-sm text-slate-300">{server.name} Tools</span>
                   <div className={cn(
                     "w-2 h-2 rounded-full",
-                    activeStep === 3 && selectedServers.includes(idx) ? 'bg-warning animate-pulse' : 'bg-muted-foreground/30'
+                    activeStep === 3 && selectedServers.includes(idx) ? 'bg-yellow-500 animate-pulse' : 'bg-slate-700'
                   )} />
                 </div>
               ))}
@@ -329,16 +329,16 @@ const WorkflowDiagram = () => {
           <div className={cn(
             "inline-flex items-center gap-3 px-6 py-3 rounded-full border-2 transition-all duration-500",
             (activeStep === 1 || activeStep === 4) 
-              ? 'bg-gradient-primary border-primary shadow-glow scale-110' 
-              : 'bg-card border-border'
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 border-purple-500 shadow-glow shadow-purple-500/50 scale-110' 
+              : 'bg-slate-900 border-slate-800'
           )}>
             <Brain className={cn(
               "w-5 h-5",
-              (activeStep === 1 || activeStep === 4) ? 'text-white animate-pulse' : 'text-primary'
+              (activeStep === 1 || activeStep === 4) ? 'text-white animate-pulse' : 'text-purple-400'
             )} />
             <span className={cn(
               "font-semibold",
-              (activeStep === 1 || activeStep === 4) ? 'text-white' : 'text-foreground'
+              (activeStep === 1 || activeStep === 4) ? 'text-white' : 'text-slate-300'
             )}>
               Powered by Azure OpenAI
             </span>
