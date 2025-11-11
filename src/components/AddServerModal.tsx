@@ -19,10 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { MCPServerConfig } from '@/lib/api';
 
 interface AddServerModalProps {
-  onAdd: (config: MCPServerConfig) => Promise<void>;
+  onAdd: (config: any) => Promise<void>;
 }
 
 export default function AddServerModal({ onAdd }: AddServerModalProps) {
@@ -32,7 +31,7 @@ export default function AddServerModal({ onAdd }: AddServerModalProps) {
   const [name, setName] = useState('');
   const [command, setCommand] = useState('');
   const [args, setArgs] = useState<string[]>(['']);
-  const [endpoint, setEndpoint] = useState('');
+  const [url, setUrl] = useState('');
   const [envVars, setEnvVars] = useState<Array<{ key: string; value: string }>>([
     { key: '', value: '' },
   ]);
@@ -71,17 +70,19 @@ export default function AddServerModal({ onAdd }: AddServerModalProps) {
     setLoading(true);
 
     try {
-      const config: MCPServerConfig = {
-        name,
+      // Build the request body - FLAT structure matching backend
+      const requestBody: any = {
+        name: name,
         type: serverType,
         description: description || undefined,
       };
 
       if (serverType === 'command') {
-        config.command = command;
-        config.args = args.filter((arg) => arg.trim() !== '');
+        requestBody.command = command;
+        requestBody.args = args.filter((arg) => arg.trim() !== '');
       } else {
-        config.endpoint = endpoint;
+        // For HTTP servers, use 'url' field
+        requestBody.url = url;
       }
 
       // Build env object
@@ -92,16 +93,18 @@ export default function AddServerModal({ onAdd }: AddServerModalProps) {
         }
       });
       if (Object.keys(env).length > 0) {
-        config.env = env;
+        requestBody.env = env;
       }
 
-      await onAdd(config);
+      console.log('Sending server config:', requestBody); // Debug log
+
+      await onAdd(requestBody);
       
       // Reset form
       setName('');
       setCommand('');
       setArgs(['']);
-      setEndpoint('');
+      setUrl('');
       setEnvVars([{ key: '', value: '' }]);
       setDescription('');
       setOpen(false);
@@ -177,7 +180,7 @@ export default function AddServerModal({ onAdd }: AddServerModalProps) {
                     <Input
                       value={arg}
                       onChange={(e) => handleArgChange(index, e.target.value)}
-                      placeholder="e.g., -y, @modelcontextprotocol/server-name"
+                      placeholder="e.g., -y, @modelcontextprotocol/server-slack"
                     />
                     {args.length > 1 && (
                       <Button
@@ -202,11 +205,11 @@ export default function AddServerModal({ onAdd }: AddServerModalProps) {
           {/* HTTP Type Fields */}
           {serverType === 'http' && (
             <div className="space-y-2">
-              <Label htmlFor="endpoint">Server Endpoint *</Label>
+              <Label htmlFor="url">Server URL *</Label>
               <Input
-                id="endpoint"
-                value={endpoint}
-                onChange={(e) => setEndpoint(e.target.value)}
+                id="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://api.example.com"
                 type="url"
                 required

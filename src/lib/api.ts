@@ -18,7 +18,7 @@ export interface ServerInfo {
   description: string;
   tools_count: number;
   status: string;
-  endpoint?: string;
+  url?: string;
   command?: string;
 }
 
@@ -50,7 +50,7 @@ export interface MCPServerConfig {
   command?: string;
   args?: string[];
   env?: Record<string, string>;
-  endpoint?: string;
+  url?: string; // Changed from 'endpoint' to 'url'
 }
 
 class APIClient {
@@ -92,6 +92,7 @@ class APIClient {
   }
 
   async addServer(data: MCPServerConfig): Promise<{ message: string; success: boolean }> {
+    console.log('API Client sending:', data); // Debug log
     const response = await fetch(`${API_BASE_URL}/mcp-servers`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
